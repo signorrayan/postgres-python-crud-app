@@ -6,34 +6,29 @@ The Contact book based in authentication user, using python and Postgresql
 
 
 .
+To configure postgreSQL, Enter own databae indformation inside app.py:
+```bash
+Database.initialise(database="cotactbook",
+                        user="postgres",
+                        password="147r258r",
+                        host="localhost",
+                        port="5432"
+                        ) #create a database connection
+```
 
-#### to Sign-up as a new User:
+
+#### Sign-up as a new User:
 ```bash
 python app.py --signup
-
 ```
-#### to login as a User:
+
+#### login as a User:
 ```bash
 python app.py --login
 
-```
-
-#### to add a new contact into database.
 ```bash
-python app.py --add
-```
-  
-#### to view full contact information using firstname or lastname
-```bash
-python app.py --view
-```
-
-#### to view all Contacts:
-```bash
-python app.py --viewall
-```
-
-#### to delete a contact using contact ID:
-```bash
-python app.py --delete
+--add to add a new contact into database.
+--view to view full contact information using firstname or lastname
+--viewall to view all Contacts
+--delete to delete a contact using contact ID
 ```
