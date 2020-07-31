@@ -1,10 +1,8 @@
 # -Contact-book-using-python-and-postgresql
-The Contact book based in authentication user using python and Postgresql
-
-
 
 #### an CLI program to save contacts using python and postgresql.
 (Including Firstname, Lastname, Email, Phonenumber)
+The Contact book based in authentication user, using python and Postgresql
 
 
 .
