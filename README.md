@@ -8,10 +8,10 @@ The Contact book based in authentication user, using python and Postgresql
 .
 To configure postgreSQL, Enter own databae indformation inside app.py:
 ```bash
-Database.initialise(database="cotactbook",
-                        user="postgres",
-                        password="147r258r",
-                        host="localhost",
+Database.initialise(database="contactbook",
+                        user=" ",
+                        password=" ",
+                        host=" ",
                         port="5432"
                         ) #create a database connection
 ```
@@ -25,6 +25,7 @@ python app.py --signup
 #### login as a User:
 ```bash
 python app.py --login
+```
 
 ```bash
 --add to add a new contact into database.
