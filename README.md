@@ -28,7 +28,7 @@ python app.py --login
 ```
 
 ```bash
-add to add a new contact into database.
+[add] to add a new contact into database.
 [view] to view full contact information using firstname or lastname
 [view -a] to view all Contacts
 [delete] to delete a contact using contact ID
