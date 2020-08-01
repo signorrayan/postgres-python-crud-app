@@ -53,7 +53,7 @@ class Contacts(UserAuth):
                 user_data = row
                 headers = ('Contact ID: ', 'First Name: ', 'Last Name: ', 'Email: ', 'Phone Number: ')
                 [print(f"{BOLD}{Fore.BLUE}{key:15}{Style.RESET_ALL}{str(value)}") for key, value in dict(zip(headers, user_data)).items()]
-            cont = str(input("Press Enter To continue"))
+            cont = str(input("\nPress Enter To continue"))
 
 
     @classmethod
@@ -61,12 +61,17 @@ class Contacts(UserAuth):
         with CurserFromConnectionFromPool() as cursor:
             cursor.execute('SELECT * FROM contact WHERE u_id=%s; ', [user_id])
             rows = cursor.fetchall()
+            print(f"{BOLD}{Fore.BLUE}"
+                  f"{'[ContactID]':20}{'[FirstName]':20}{'[LastName]':20}{'[Email]':20}{'[PhoneNumber]'}\n"
+                  f"{'=' * 95}"
+                  f"{Style.RESET_ALL}")
             for row in rows:
                 user_data = row
-                headers = ('Contact ID: ', 'First Name: ', 'Last Name: ', 'Email: ', 'Phone Number: ')
-                [print(f"{BOLD}{Fore.BLUE}{key:15}{Style.RESET_ALL}{str(value)}")
-                 for key, value in dict(zip(headers, user_data)).items()]
-                print('\n')
+                print(f"{str(user_data[0]):20}{user_data[1]:20}{user_data[2]:20}{user_data[3]:20}{user_data[4]}")
+                print(f"{'-' * 95}")
+                # [print(f"{BOLD}{Fore.BLUE}{key:15}{Style.RESET_ALL}{str(value)}")
+                #  for key, value in dict(zip(headers, user_data)).items()]
+                # print('\n')
             cont = str(input("Press Enter To continue"))
 
 
@@ -95,3 +100,53 @@ class Contacts(UserAuth):
                 return none_id
 
 
+    @classmethod
+    def update_contact(cls, user_id):
+        given_name = str(input(f"{BOLD}Enter the ContactID or Name: {Style.RESET_ALL}\n"))
+        action = str(input(f"{BOLD}Alright, What do you want to do?\n{Style.RESET_ALL}"
+                           f"'cn' To change first name\n"
+                           f"'cl' To change last name\n"
+                           f"'ce' To change email\n"
+                           f"'cp' To change phone number\n"))
+        if action == 'cn':
+            act = str(input(f"{BOLD}Enter the new Name: {Style.RESET_ALL}"))
+            column = "first_name"
+
+        elif action == 'cl':
+            act = str(input(f"{BOLD}Enter the new LastName: {Style.RESET_ALL}"))
+            column = 'last_name'
+
+        elif action == 'ce':
+            act = str(input(f"{BOLD}Enter the new Email: {Style.RESET_ALL}"))
+            column = 'email'
+
+        elif action == 'cp':
+            act = str(input(f"{BOLD}Enter the new PhoneNumber: {Style.RESET_ALL}"))
+            column = 'phone_number'
+
+        else:
+            print("Incorrect Switch, try again..")
+            Contacts.update_contact(user_id)
+
+        with CurserFromConnectionFromPool() as cursor:
+            cursor.execute(f"UPDATE contact SET {column}=%s WHERE (c_id=%s OR first_name=%s) AND u_id=%s RETURNING *",
+                           (act, given_name, given_name, user_id ))
+            user_data = cursor.fetchone()
+
+            if user_data is None:
+                print(f"\n{Fore.LIGHTRED_EX}This ID or Name does not exists! Try again..{Style.RESET_ALL}\n"
+                      f"(to see the contact id, first use --view to know the ID)\n")
+                none_id = True
+                return none_id
+
+            else:
+                none_id = False
+                headers = ('Contact ID: ', 'First Name: ', 'Last Name: ', 'Email: ', 'Phone Number: ')
+                [
+                    print(f"{Fore.LIGHTBLACK_EX}{key:15}{Style.RESET_ALL}{str(value)}")
+                    for key, value in dict(zip(headers, user_data)).items()
+                 ]
+
+                print(f"{BOLD}{Fore.GREEN}The Contact {user_data[1]} Successfully Updated.{Style.RESET_ALL}")
+                cont = str(input("Press Enter To continue"))
+                return none_id
