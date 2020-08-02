@@ -1,4 +1,4 @@
-# -Contact-book-using-python-and-postgreSQL
+# Contact-book-using-python-and-postgreSQL
 
 #### an CLI program to save contacts using python and postgreSQL.
 (Including Firstname, Lastname, Email, Phonenumber)\
@@ -28,8 +28,9 @@ python app.py --login
 ```
 
 ```bash
---add to add a new contact into database.
---view to view full contact information using firstname or lastname
---viewall to view all Contacts
---delete to delete a contact using contact ID
+[add] to add a new contact into database.
+[view] to view full contact information using firstname or lastname
+[view -a] to view all Contacts
+[delete] to delete a contact using contact ID
+[update] to Update an existing Contact
 ```
