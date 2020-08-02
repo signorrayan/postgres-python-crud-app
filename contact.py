@@ -99,31 +99,37 @@ class Contacts(UserAuth):
 
     @classmethod
     def update_contact(cls, user_id):
-        given_name = str(input(f"{BOLD}Enter the ContactID or Name: {Style.RESET_ALL}\n"))
-        action = str(input(f"{BOLD}Alright, What do you want to do?\n{Style.RESET_ALL}"
-                           f"'cn' To change first name\n"
-                           f"'cl' To change last name\n"
-                           f"'ce' To change email\n"
-                           f"'cp' To change phone number\n"))
-        if action == 'cn':
-            act = str(input(f"{BOLD}Enter the new Name: {Style.RESET_ALL}"))
-            column = "first_name"
+        given_name = str(input(f"{BOLD}Enter the ContactID or Name: {Style.RESET_ALL}"))
 
-        elif action == 'cl':
-            act = str(input(f"{BOLD}Enter the new LastName: {Style.RESET_ALL}"))
-            column = 'last_name'
+        def get_action(user_id):
+            action = str(input(f"{BOLD}Alright, What do you want to do?\n{Style.RESET_ALL}"
+                            f"'cn' To change first name\n"
+                            f"'cl' To change last name\n"
+                            f"'ce' To change email\n"
+                            f"'cp' To change phone number\n"))
+            if action == 'cn':
+                act = str(input(f"{BOLD}Enter the new Name: {Style.RESET_ALL}"))
+                column = "first_name"
 
-        elif action == 'ce':
-            act = str(input(f"{BOLD}Enter the new Email: {Style.RESET_ALL}"))
-            column = 'email'
+            elif action == 'cl':
+                act = str(input(f"{BOLD}Enter the new LastName: {Style.RESET_ALL}"))
+                column = 'last_name'
 
-        elif action == 'cp':
-            act = str(input(f"{BOLD}Enter the new PhoneNumber: {Style.RESET_ALL}"))
-            column = 'phone_number'
+            elif action == 'ce':
+                act = str(input(f"{BOLD}Enter the new Email: {Style.RESET_ALL}"))
+                column = 'email'
 
-        else:
-            print("Incorrect Switch, try again..")
-            Contacts.update_contact(user_id)
+            elif action == 'cp':
+                act = str(input(f"{BOLD}Enter the new PhoneNumber: {Style.RESET_ALL}"))
+                column = 'phone_number'               
+
+            else:
+                print(f"{Fore.LIGHTRED_EX}Incorrect Switch, try again..{Style.RESET_ALL}")
+                column = get_action(user_id)
+
+            return (column, act)
+
+        column, act = get_action(user_id)
 
         with CurserFromConnectionFromPool() as cursor:
             cursor.execute(f"UPDATE contact SET {column}=%s WHERE (c_id=%s OR first_name=%s) AND u_id=%s RETURNING *",
