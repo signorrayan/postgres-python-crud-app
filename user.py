@@ -45,6 +45,8 @@ class UserLogin():
     if the user found, user will authenticate via UserAuth() class to do actions.
     if the user not found in the database, should try again.
     """
+    try_to_login = 1
+
     def __init__(self, user_name, password, u_id ):
         self.user_name = user_name
         self.password = password
@@ -86,10 +88,14 @@ class UserLogin():
 
             else:
                 logged_in = False
-                while not logged_in:
+                while UserLogin.try_to_login <3:
+                # while not logged_in:
+                    UserLogin.try_to_login += 1
                     print(f"{Fore.LIGHTRED_EX}Incorrect username or password, Try Again...{Style.RESET_ALL}")
                     data = UserLogin.login_information()
                     UserLogin.check_login(data)
+                print("\nYour 3 times triying to login has been expired!")
+                exit()
 
 
 
