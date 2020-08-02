@@ -1,6 +1,7 @@
 from database import CurserFromConnectionFromPool
 from colorama import Fore, Style
 from datetime import datetime
+from getpass import getpass
 
 BOLD = '\033[1m'
 
@@ -23,7 +24,7 @@ class UserSignUp():
                 user_name = str(input(f"{BOLD}Enter another Username: {Style.RESET_ALL}"))
                 cursor.execute("SELECT user_name FROM users WHERE user_name=%s", (user_name,))
                 check_existing_user = cursor.fetchone()
-            password = str(input(f"{BOLD}Enter a Password: {Style.RESET_ALL}"))
+            password = str(getpass(f"{BOLD}Enter a Password: {Style.RESET_ALL}"))
             u_id = None  # will picked by default via Database.
             return cls(user_name, password, id)
 
@@ -67,7 +68,7 @@ class UserLogin():
     @classmethod
     def login_information(cls):
         user_name = str(input(f"{BOLD}Username: {Style.RESET_ALL}"))
-        password = str(input(f"{BOLD}Password: {Style.RESET_ALL}"))
+        password = str(getpass(f"{BOLD}Password: {Style.RESET_ALL}"))
         return cls(user_name, password, None)
 
     def check_login(self):

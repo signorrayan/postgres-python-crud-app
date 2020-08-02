@@ -59,7 +59,7 @@ class Contacts(UserAuth):
     @classmethod
     def view_all(cls, user_id):
         with CurserFromConnectionFromPool() as cursor:
-            cursor.execute('SELECT * FROM contact WHERE u_id=%s; ', [user_id])
+            cursor.execute('SELECT * FROM contact WHERE u_id=%s ORDER BY last_name;', [user_id])
             rows = cursor.fetchall()
             print(f"{BOLD}{Fore.BLUE}"
                   f"{'[ContactID]':20}{'[FirstName]':20}{'[LastName]':20}{'[Email]':20}{'[PhoneNumber]'}\n"
@@ -73,9 +73,6 @@ class Contacts(UserAuth):
                 #  for key, value in dict(zip(headers, user_data)).items()]
                 # print('\n')
             cont = str(input("Press Enter To continue"))
-
-
-
 
 
     @classmethod
