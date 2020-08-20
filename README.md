@@ -7,7 +7,8 @@ The Contact book based in authentication user, using python and Postgresql
 
 .
 #### To configure postgreSQL, Enter own databae indformation inside app.py:
-```bash Database.initialise(database="contactbook",
+```bash
+Database.initialise(database="contactbook",
                         user=" ",
                         password=" ",
                         host=" ",
@@ -18,7 +19,8 @@ The Contact book based in authentication user, using python and Postgresql
 
 
 #### create tables and extension(to encrypt password) in DB:
-```bash CREATE TABLE users(
+```bash
+CREATE TABLE users(
   u_id SERIAL PRIMARY KEY,
   user_name VARCHAR(50) UNIQUE NOT NULL,
   password TEXT NOT NULL
