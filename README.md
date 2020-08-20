@@ -17,6 +17,28 @@ Database.initialise(database="contactbook",
 ```
 
 
+
+#### create requirements in DB:
+```bash
+CREATE TABLE users(
+  u_id SERIAL PRIMARY KEY,
+  user_name VARCHAR(50) UNIQUE NOT NULL,
+  password TEXT NOT NULL
+  );
+
+CREATE TABLE contact(
+  c_id SERIAL PRIMARY KEY,
+  first_name VARCHAR(100) not null,
+  last_name VARCHAR(100) not null,
+  email VARCHAR(200),
+  phone_number VARCHAR(11),
+  u_id int references users(u_id) not null
+  );
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+```
+
+
 #### Sign-up as a new User:
 ```bash
 python app.py --signup
