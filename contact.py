@@ -52,6 +52,7 @@ class Contacts(UserAuth):
             for row in rows:
                 user_data = row
                 headers = ('Contact ID: ', 'First Name: ', 'Last Name: ', 'Email: ', 'Phone Number: ')
+
                 [print(f"{BOLD}{Fore.BLUE}{key:15}{Style.RESET_ALL}{str(value)}") for key, value in dict(zip(headers, user_data)).items()]
             cont = str(input("\nPress Enter To continue"))
 
@@ -83,7 +84,7 @@ class Contacts(UserAuth):
             user_data = cursor.fetchone()
             if user_data is None:
                 print(f"\n{Fore.LIGHTRED_EX}This ID does not exists! Try again..{Style.RESET_ALL}\n"
-                      f"(to see the contact id, first use --view to know the ID)\n")
+                      f"(to see the contact id, first use 'view -a' to know the ID)\n")
                 none_id = True
                 return none_id
 

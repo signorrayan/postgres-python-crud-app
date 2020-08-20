@@ -37,6 +37,8 @@ def cli(login, add, view, viewall, delete, signup):
         print(message)
     elif delete:
         print(message)
+    else:
+        print("To use the app, add the --login or --signup at the end of app.py name")
 
 if __name__ == '__main__':
     cli()
