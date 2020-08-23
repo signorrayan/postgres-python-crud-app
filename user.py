@@ -2,6 +2,7 @@ from database import CurserFromConnectionFromPool
 from colorama import Fore, Style
 from datetime import datetime
 from getpass import getpass
+import os
 
 BOLD = '\033[1m'
 
@@ -80,8 +81,6 @@ class UserLogin():
                            (self.user_name, self.password))
             user_data = cursor.fetchone()
             if user_data is not None:
-                time = datetime.now().strftime("%c")
-                print(f"\n{BOLD}{Fore.GREEN}[User {self.user_name} logged in]{Style.RESET_ALL}\n{time}\n{'-'*24}")
                 self.logged_in = True
                 while self.logged_in:
                     UserAuth.authenticate(self)
@@ -97,6 +96,9 @@ class UserLogin():
                 print("\nYour 3 times triying to login has been expired!")
                 exit()
 
+    def clear_screen(self):
+        return os.system('cls' if os.name == 'nt' else 'clear')
+
 
 
 
@@ -105,13 +107,16 @@ class UserAuth(UserLogin):
     To authenticate the logged in user to can use the options.
     (Based in user ID PRIMARY KEY in the database).
     """
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
 
     def authenticate(self):
         from contact import Contacts
-
+        self.clear_screen()
+        time = datetime.now().strftime("%c")
+        print(f"{BOLD}{Fore.GREEN}[User {self.user_name} logged in]{Style.RESET_ALL}\n{time}\n{'-' * 24}")
         input_flag = str(input(f"{BOLD}What do you want to do?{Style.RESET_ALL}\n"
                                f"{BOLD}{'[view -a]':10}{Style.RESET_ALL}to view all saved contacts\n"
                                f"{BOLD}{'[view]':10}{Style.RESET_ALL}to view a specific contact\n"
