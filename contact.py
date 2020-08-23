@@ -28,9 +28,12 @@ class Contacts(UserAuth):
     def enter_data(cls, user_id):
         cls.clear_screen(cls)
         print(f"{BOLD}{Fore.BLACK}Enter your contact information{Style.RESET_ALL}")
-        first_name = str(input("- Firstname: "))
-        last_name = str(input("- Lastname: "))
+        first_name = str(input("- Firstname: ")).title()
+        last_name = str(input("- Lastname: ")).title()
         phone_number = str(input("- PhoneNumber: "))
+        while len(phone_number) != 11:
+            print(f"{Fore.LIGHTRED_EX}Enter a correct Phone number!{Style.RESET_ALL}")
+            phone_number = str(input("- PhoneNumber: "))
         email = str(input("- Email: "))
         c_id = None
         u_id = user_id
