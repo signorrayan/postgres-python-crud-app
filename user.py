@@ -13,7 +13,6 @@ class UserSignUp():
         self.password = password
         self.u_id = u_id
 
-
     @classmethod
     def signup_information(cls):
         user_name = str(input(f"{BOLD}Enter a Username: {Style.RESET_ALL}")).lower()
@@ -30,14 +29,11 @@ class UserSignUp():
             return cls(user_name, password, id)
 
 
-
-
     def save_to_db(self): #To save the new user in the database.
         with CurserFromConnectionFromPool() as cursor:
                 cursor.execute("INSERT INTO users(user_name, password) VALUES (%s, crypt(%s, gen_salt('bf')))",
                                (self.user_name, self.password))
                 print(f"{BOLD}Successfully Signed up, you can login with --login flag.{Style.RESET_ALL}")
-
 
 
 class UserLogin():
@@ -47,13 +43,11 @@ class UserLogin():
     if the user not found in the database, should try again.
     """
     try_to_login = 1
-
     def __init__(self, user_name, password, u_id ):
         self.user_name = user_name
         self.password = password
         self.u_id = u_id
         self.logged_in = False
-
 
     def return_user_id(self):
         with CurserFromConnectionFromPool() as cursor:
@@ -66,7 +60,6 @@ class UserLogin():
             user_u_id = cursor.fetchone()[0]
             return user_u_id
         return user_u_id
-
 
     @classmethod
     def login_information(cls):
@@ -100,17 +93,13 @@ class UserLogin():
         return os.system('cls' if os.name == 'nt' else 'clear')
 
 
-
-
 class UserAuth(UserLogin):
     """
     To authenticate the logged in user to can use the options.
     (Based in user ID PRIMARY KEY in the database).
     """
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
 
     def authenticate(self):
         from contact import Contacts
@@ -125,7 +114,6 @@ class UserAuth(UserLogin):
                                f"{BOLD}{'[del]':10}{Style.RESET_ALL}to delete a contact\n"           
                                f"{BOLD}{'[update]':10}{Style.RESET_ALL}to update an existing contact\n"
                                f"{BOLD}{'[exit]':10}{Style.RESET_ALL}to exit the program\n~$ "))
-
 
         if input_flag == 'view':
             Contacts.view_contact(user_id, show_user_time)
@@ -148,7 +136,6 @@ class UserAuth(UserLogin):
         elif input_flag =='exit':
             self.clear_screen()
             exit()
-
 
     def show_user_time(self):
         time = datetime.now().strftime("%c")

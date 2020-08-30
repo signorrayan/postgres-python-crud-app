@@ -32,6 +32,7 @@ class Contacts(UserAuth):
         print(f"{BOLD}{Fore.BLACK}Enter your contact information{Style.RESET_ALL}")
         first_name = str(input("- Firstname: ")).title()
         last_name = str(input("- Lastname: ")).title()
+
         while True:
             phone_number = str(input("- PhoneNumber: "))
             try:
@@ -93,7 +94,6 @@ class Contacts(UserAuth):
             print(tabulate(data, headers="keys", tablefmt="fancy_grid"))
             input("\nPress Enter To continue")
 
-
     @classmethod
     def view_all(cls, user_id, show_user_time):
         with CurserFromConnectionFromPool() as cursor:
@@ -118,16 +118,15 @@ class Contacts(UserAuth):
                 data["Email"].append(user_data[3])
                 data["PhoneNumber"].append(user_data[4])
             cls.clear_screen(cls)
-            print(show_user_time)
-            print(f"{BOLD}Your Contacts list{Style.RESET_ALL}")
+
+            print(f"{show_user_time}\n{BOLD}Your Contacts list{Style.RESET_ALL}")
             print(tabulate(data, headers="keys", tablefmt="fancy_grid"))
             #     print(f"{str(user_data[0]):20}{user_data[1]:20}{user_data[2]:20}{user_data[3]:20}{user_data[4]}")
             #     print(f"{'-' * 95}")
                 # [print(f"{BOLD}{Fore.BLUE}{key:15}{Style.RESET_ALL}{str(value)}")
                 #  for key, value in dict(zip(headers, user_data)).items()]
                 # print('\n')
-            cont = str(input("Press Enter To continue"))
-
+            input("Press Enter To continue")
 
     @classmethod
     def delete_contact(cls, user_id, show_user_time):
@@ -152,6 +151,7 @@ class Contacts(UserAuth):
                       f"(to see the contact id, first use 'view -a' to know the ID)\n")
                 none_id = True
                 return none_id
+
             else:
                 none_id = False
                 headers = ('Contact ID: ', 'First Name: ', 'Last Name: ', 'Email: ', 'Phone Number: ')
@@ -163,7 +163,6 @@ class Contacts(UserAuth):
                 print(f"{BOLD}{Fore.GREEN}The Contact {user_data[1]} Successfully deleted.{Style.RESET_ALL}")
                 cont = str(input("Press Enter To continue"))
                 return none_id
-
 
     @classmethod
     def update_contact(cls, user_id, show_user_time):
@@ -182,15 +181,12 @@ class Contacts(UserAuth):
             if action == 'cn':
                 act = str(input(f"{BOLD}Enter the new Name: {Style.RESET_ALL}"))
                 column = "first_name"
-
             elif action == 'cl':
                 act = str(input(f"{BOLD}Enter the new LastName: {Style.RESET_ALL}"))
                 column = 'last_name'
-
             elif action == 'ce':
                 act = str(input(f"{BOLD}Enter the new Email: {Style.RESET_ALL}"))
                 column = 'email'
-
             elif action == 'cp':
                 act = str(input(f"{BOLD}Enter the new PhoneNumber: {Style.RESET_ALL}"))
                 column = 'phone_number'               
@@ -200,12 +196,12 @@ class Contacts(UserAuth):
                 column = get_action(user_id)
 
             return (column, act)
-
         column, act = get_action(user_id)
 
         with CurserFromConnectionFromPool() as cursor:
-            cursor.execute(f"UPDATE contact SET {column}=%s WHERE (c_id=%s AND u_id=%s) RETURNING *",
-                           (act, given_name, user_id ))
+            cursor.execute(
+                    f"UPDATE contact SET {column}=%s WHERE (c_id=%s AND u_id=%s) RETURNING *", (act, given_name, user_id)
+                    )
             user_data = cursor.fetchone()
 
             if user_data is None:
@@ -221,7 +217,6 @@ class Contacts(UserAuth):
                     print(f"{Fore.LIGHTBLACK_EX}{key:15}{Style.RESET_ALL}{str(value)}")
                     for key, value in dict(zip(headers, user_data)).items()
                  ]
-
                 print(f"{BOLD}{Fore.GREEN}The Contact {user_data[1]} Successfully Updated.{Style.RESET_ALL}")
                 cont = str(input("\nPress Enter To continue"))
                 return none_id
