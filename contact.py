@@ -1,7 +1,8 @@
 from database import CurserFromConnectionFromPool
 from colorama import Fore, Style
-from user import UserAuth
+from user import UserAuth, UserLogin
 from tabulate import tabulate
+from time import sleep
 import os
 import re
 BOLD = '\033[1m'
@@ -37,17 +38,18 @@ class Contacts(UserAuth):
             phone_number = str(input("- PhoneNumber: "))
             try:
                 while len(phone_number) != 11 or not isinstance(int(phone_number), int):
-                    print(f"{Fore.LIGHTRED_EX}Enter a correct Phone number!{Style.RESET_ALL}")
+                    print(f"{Fore.LIGHTRED_EX}Enter a correct Phone number.(Exp: 09112345678){Style.RESET_ALL}")
                     phone_number = str(input("- PhoneNumber: "))
                 break
             except ValueError:
-                print(f"{Fore.LIGHTRED_EX}Enter a correct Phone number!{Style.RESET_ALL}")
+                print(f"{Fore.LIGHTRED_EX}Enter a correct Phone number!(Exp: 09112345678){Style.RESET_ALL}")
                 continue
 
         pattern = re.compile(r"\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?")
         email = str(input("- Email: "))
         while not re.match(pattern, email):
-            print(f"{Fore.LIGHTRED_EX}'{email}' is invalid email format, try again..{Style.RESET_ALL}")
+            print(f"{Fore.LIGHTRED_EX}'{email}' is invalid email format, try again..\n"
+                  f"(Exp: m.sarayloo@protonmail.com){Style.RESET_ALL}")
             email = str(input("- Email: "))
 
         c_id = None
@@ -132,37 +134,49 @@ class Contacts(UserAuth):
     def delete_contact(cls, user_id, show_user_time):
         cls.clear_screen(cls)
         print(show_user_time)
-        given_id = str(input(f"{BOLD}Enter the ContactID: {Style.RESET_ALL}\n"
-                             f"(if you don't know the ID, Enter 'view -a': "))
-        while given_id != 'view -a' or not isinstance(int(given_id), int):
-            print(f"{Fore.LIGHTRED_EX}Invalid Id, Try again..{Style.RESET_ALL}")
+        while True:
             given_id = str(input(f"{BOLD}\nEnter the ContactID: {Style.RESET_ALL}\n"
-                                 f"(if you don't know the ID, Enter 'view -a': "))
-            if given_id == 'view -a':
-                Contacts.view_all(user_id, show_user_time)
-                given_id = str(input(f"{BOLD}Enter the ContactID: {Style.RESET_ALL}"))
-                break
+                                 f"(see all contacts: 'view -a' or back to menu: 'back':\n$ "))
+            try:
+                if given_id == 'view -a':
+                    Contacts.view_all(user_id, show_user_time)
+                    given_id = str(input(f"{BOLD}\nEnter the ContactID: {Style.RESET_ALL}"))
+                elif given_id == 'back':
+                    break
 
-        with CurserFromConnectionFromPool() as cursor:
-            cursor.execute('DELETE FROM contact WHERE c_id=%s AND u_id=%s RETURNING *', (given_id, user_id))
-            user_data = cursor.fetchone()
-            if user_data is None:
-                print(f"\n{Fore.LIGHTRED_EX}This ID does not exists! Try again..{Style.RESET_ALL}\n"
-                      f"(to see the contact id, first use 'view -a' to know the ID)\n")
-                none_id = True
-                return none_id
+                if not isinstance(int(given_id), int):
+                # while given_id != 'view -a' or  not isinstance(int(given_id), int):
+                    print(f"{Fore.LIGHTRED_EX}Invalid Id, Try again..{Style.RESET_ALL}")
+                    # given_id = str(input(f"{BOLD}\nEnter the ContactID: {Style.RESET_ALL}"))
+                elif isinstance(int(given_id), int):
+                    break
 
-            else:
-                none_id = False
-                headers = ('Contact ID: ', 'First Name: ', 'Last Name: ', 'Email: ', 'Phone Number: ')
-                # cls.clear_screen(cls)
-                # print(show_user_time)
-                cls.clear_screen(cls)
-                [print(f"{Fore.LIGHTBLACK_EX}{key:15}{Style.RESET_ALL}{str(value)}")
-                for key, value in dict(zip(headers, user_data)).items()]
-                print(f"{BOLD}{Fore.GREEN}The Contact {user_data[1]} Successfully deleted.{Style.RESET_ALL}")
-                cont = str(input("Press Enter To continue"))
-                return none_id
+            except ValueError:
+                print(f"{Fore.LIGHTRED_EX}Try again..{Style.RESET_ALL}")
+
+        if given_id != 'back':
+            with CurserFromConnectionFromPool() as cursor:
+                cursor.execute('DELETE FROM contact WHERE c_id=%s AND u_id=%s RETURNING *', (given_id, user_id))
+                user_data = cursor.fetchone()
+                if user_data is None:
+                    print(f"\n{Fore.LIGHTRED_EX}This ID does not exists! Try again..{Style.RESET_ALL}\n"
+                          f"(to see the contact id, first use 'view -a' to know the ID)\n")
+                    sleep(5)
+                    # none_id = True
+                    # return none_id
+
+                else:
+                    none_id = False
+                    headers = ('Contact ID: ', 'First Name: ', 'Last Name: ', 'Email: ', 'Phone Number: ')
+                    # cls.clear_screen(cls)
+                    # print(show_user_time)
+                    cls.clear_screen(cls)
+                    print(show_user_time)
+                    [print(f"{Fore.LIGHTBLACK_EX}{key:15}{Style.RESET_ALL}{str(value)}")
+                    for key, value in dict(zip(headers, user_data)).items()]
+                    print(f"{BOLD}{Fore.GREEN}The Contact {user_data[1]} Successfully deleted.{Style.RESET_ALL}")
+                    cont = str(input("Press Enter To continue"))
+                    return none_id
 
     @classmethod
     def update_contact(cls, user_id, show_user_time):
