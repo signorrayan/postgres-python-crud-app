@@ -1,6 +1,7 @@
 p-a-p
 __pycache__
 __pycache__/
+LOGO.py
 .idea
 .vscode
 ContactBookDB.session.sql
