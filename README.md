@@ -1,8 +1,8 @@
-# Contact-book-using-python-and-postgreSQL
+# Advanced-CRUD-App-using-python-and-postgreSQL
 
-#### an CLI program to save contacts using python and postgreSQL.
+#### an CLI program to manage people informations using python and postgreSQL.
 (Including Firstname, Lastname, Email, Phonenumber)\
-The Contact book based in authentication user, using python and Postgresql
+The App based on user authentication, using python and Postgresql
 
 
 .
