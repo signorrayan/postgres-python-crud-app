@@ -3,6 +3,7 @@ from colorama import Fore, Style
 from user import UserAuth
 from tabulate import tabulate
 import os
+import re
 BOLD = '\033[1m'
 
 
@@ -25,16 +26,29 @@ class Contacts(UserAuth):
             cont = str(input("Press Enter To continue"))
             
     @classmethod
-    def enter_data(cls, user_id):
+    def enter_data(cls, user_id, show_user_time):
         cls.clear_screen(cls)
+        print(show_user_time)
         print(f"{BOLD}{Fore.BLACK}Enter your contact information{Style.RESET_ALL}")
         first_name = str(input("- Firstname: ")).title()
         last_name = str(input("- Lastname: ")).title()
-        phone_number = str(input("- PhoneNumber: "))
-        while len(phone_number) != 11:
-            print(f"{Fore.LIGHTRED_EX}Enter a correct Phone number!{Style.RESET_ALL}")
+        while True:
             phone_number = str(input("- PhoneNumber: "))
+            try:
+                while len(phone_number) != 11 or not isinstance(int(phone_number), int):
+                    print(f"{Fore.LIGHTRED_EX}Enter a correct Phone number!{Style.RESET_ALL}")
+                    phone_number = str(input("- PhoneNumber: "))
+                break
+            except ValueError:
+                print(f"{Fore.LIGHTRED_EX}Enter a correct Phone number!{Style.RESET_ALL}")
+                continue
+
+        pattern = re.compile(r"\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?")
         email = str(input("- Email: "))
+        while not re.match(pattern, email):
+            print(f"{Fore.LIGHTRED_EX}'{email}' is invalid email format, try again..{Style.RESET_ALL}")
+            email = str(input("- Email: "))
+
         c_id = None
         u_id = user_id
         return cls(
@@ -47,8 +61,9 @@ class Contacts(UserAuth):
                     )
 
     @classmethod
-    def view_contact(cls, user_id):
+    def view_contact(cls, user_id, show_user_time):
         cls.clear_screen(cls)
+        print(show_user_time)
         given_name = str(input("Enter Firstname or Lastname: "))
         with CurserFromConnectionFromPool() as cursor:
             cursor.execute('SELECT * FROM contact WHERE (first_name=%s or last_name=%s) AND u_id=%s', (given_name, given_name, user_id))
@@ -73,13 +88,14 @@ class Contacts(UserAuth):
                 data["LastName"].append(user_data[2])
                 data["Email"].append(user_data[3])
                 data["PhoneNumber"].append(user_data[4])
-            cls.clear_screen(cls)
+            # cls.clear_screen(cls)
+            # print(show_user_time)
             print(tabulate(data, headers="keys", tablefmt="fancy_grid"))
-            cont = str(input("\nPress Enter To continue"))
+            input("\nPress Enter To continue")
 
 
     @classmethod
-    def view_all(cls, user_id):
+    def view_all(cls, user_id, show_user_time):
         with CurserFromConnectionFromPool() as cursor:
             cursor.execute('SELECT * FROM contact WHERE u_id=%s ORDER BY last_name;', [user_id])
             rows = cursor.fetchall()
@@ -102,6 +118,8 @@ class Contacts(UserAuth):
                 data["Email"].append(user_data[3])
                 data["PhoneNumber"].append(user_data[4])
             cls.clear_screen(cls)
+            print(show_user_time)
+            print(f"{BOLD}Your Contacts list{Style.RESET_ALL}")
             print(tabulate(data, headers="keys", tablefmt="fancy_grid"))
             #     print(f"{str(user_data[0]):20}{user_data[1]:20}{user_data[2]:20}{user_data[3]:20}{user_data[4]}")
             #     print(f"{'-' * 95}")
@@ -112,8 +130,20 @@ class Contacts(UserAuth):
 
 
     @classmethod
-    def delete_contact(cls, user_id):
-        given_id = str(input(f"{BOLD}Enter the ContactID: {Style.RESET_ALL}"))
+    def delete_contact(cls, user_id, show_user_time):
+        cls.clear_screen(cls)
+        print(show_user_time)
+        given_id = str(input(f"{BOLD}Enter the ContactID: {Style.RESET_ALL}\n"
+                             f"(if you don't know the ID, Enter 'view -a': "))
+        while given_id != 'view -a' or not isinstance(int(given_id), int):
+            print(f"{Fore.LIGHTRED_EX}Invalid Id, Try again..{Style.RESET_ALL}")
+            given_id = str(input(f"{BOLD}\nEnter the ContactID: {Style.RESET_ALL}\n"
+                                 f"(if you don't know the ID, Enter 'view -a': "))
+            if given_id == 'view -a':
+                Contacts.view_all(user_id, show_user_time)
+                given_id = str(input(f"{BOLD}Enter the ContactID: {Style.RESET_ALL}"))
+                break
+
         with CurserFromConnectionFromPool() as cursor:
             cursor.execute('DELETE FROM contact WHERE c_id=%s AND u_id=%s RETURNING *', (given_id, user_id))
             user_data = cursor.fetchone()
@@ -122,10 +152,11 @@ class Contacts(UserAuth):
                       f"(to see the contact id, first use 'view -a' to know the ID)\n")
                 none_id = True
                 return none_id
-
             else:
                 none_id = False
                 headers = ('Contact ID: ', 'First Name: ', 'Last Name: ', 'Email: ', 'Phone Number: ')
+                # cls.clear_screen(cls)
+                # print(show_user_time)
                 cls.clear_screen(cls)
                 [print(f"{Fore.LIGHTBLACK_EX}{key:15}{Style.RESET_ALL}{str(value)}")
                 for key, value in dict(zip(headers, user_data)).items()]
@@ -135,8 +166,9 @@ class Contacts(UserAuth):
 
 
     @classmethod
-    def update_contact(cls, user_id):
+    def update_contact(cls, user_id, show_user_time):
         cls.clear_screen(cls)
+        print(show_user_time)
         given_name = str(input(f"{BOLD}Enter the ContactID : {Style.RESET_ALL}"))
 
         def get_action(user_id):
@@ -145,7 +177,8 @@ class Contacts(UserAuth):
                             f"'cl' To change last name\n"
                             f"'ce' To change email\n"
                             f"'cp' To change phone number\n"))
-            cls.clear_screen(cls)
+            # cls.clear_screen(cls)
+            # print(show_user_time)
             if action == 'cn':
                 act = str(input(f"{BOLD}Enter the new Name: {Style.RESET_ALL}"))
                 column = "first_name"

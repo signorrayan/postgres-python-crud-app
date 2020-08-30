@@ -16,7 +16,7 @@ class UserSignUp():
 
     @classmethod
     def signup_information(cls):
-        user_name = str(input(f"{BOLD}Enter a Username: {Style.RESET_ALL}"))
+        user_name = str(input(f"{BOLD}Enter a Username: {Style.RESET_ALL}")).lower()
         with CurserFromConnectionFromPool() as cursor:
             cursor.execute("SELECT user_name FROM users WHERE user_name=%s", (user_name, ))
             check_existing_user = cursor.fetchone()
@@ -70,7 +70,7 @@ class UserLogin():
 
     @classmethod
     def login_information(cls):
-        user_name = str(input(f"{BOLD}Username: {Style.RESET_ALL}"))
+        user_name = str(input(f"{BOLD}Username: {Style.RESET_ALL}")).lower()
         password = str(getpass(f"{BOLD}Password: {Style.RESET_ALL}"))
         return cls(user_name, password, None)
 
@@ -114,9 +114,10 @@ class UserAuth(UserLogin):
 
     def authenticate(self):
         from contact import Contacts
+        show_user_time = UserAuth.show_user_time(self)
+        user_id = self.return_user_id()  # To know the logged in user ID
         self.clear_screen()
-        time = datetime.now().strftime("%c")
-        print(f"{BOLD}{Fore.GREEN}[User {self.user_name} logged in]{Style.RESET_ALL}\n{time}\n{'-' * 24}")
+        print(show_user_time)
         input_flag = str(input(f"{BOLD}What do you want to do?{Style.RESET_ALL}\n"
                                f"{BOLD}{'[view -a]':10}{Style.RESET_ALL}to view all saved contacts\n"
                                f"{BOLD}{'[view]':10}{Style.RESET_ALL}to view a specific contact\n"
@@ -125,24 +126,30 @@ class UserAuth(UserLogin):
                                f"{BOLD}{'[update]':10}{Style.RESET_ALL}to update an existing contact\n"
                                f"{BOLD}{'[exit]':10}{Style.RESET_ALL}to exit the program\n~$ "))
 
-        user_id = self.return_user_id()  # To know the logged in user ID
+
         if input_flag == 'view':
-            Contacts.view_contact(user_id)
+            Contacts.view_contact(user_id, show_user_time)
         elif input_flag == 'view -a':
-            Contacts.view_all(user_id)
+            Contacts.view_all(user_id, show_user_time)
         elif input_flag == 'add':
-            datas = Contacts.enter_data(user_id)
+            datas = Contacts.enter_data(user_id, show_user_time)
             Contacts.save_to_db(datas)
         elif input_flag == 'del':
             none_id = True
-            Contacts.delete_contact(user_id)
+            Contacts.delete_contact(user_id, show_user_time)
             if none_id: # If the contactID doesn't exists, print a message to check the ID using --view and try again.
                 UserAuth.authenticate(self)
         elif input_flag == 'update':
             none_id = True
-            Contacts.update_contact(user_id)
+            Contacts.update_contact(user_id, show_user_time)
             if none_id:
                 UserAuth.authenticate(self)
 
         elif input_flag =='exit':
+            self.clear_screen()
             exit()
+
+
+    def show_user_time(self):
+        time = datetime.now().strftime("%c")
+        return (f"{BOLD}{Fore.GREEN}[User {self.user_name} logged in]{Style.RESET_ALL}\n{time}\n{'-' * 24}")

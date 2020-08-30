@@ -20,7 +20,7 @@ def cli(login, add, view, viewall, delete, signup):
                         port="5432"
                         ) #create a database connection
 
-    message = f"{BOLD}{Fore.RED}You should Login to add/view/delete contacts...{Style.RESET_ALL}\n" \
+    message = f"{BOLD}{Fore.BLACK}You should Login to add/view contacts...{Style.RESET_ALL}\n" \
               f"{BOLD}{'--login':10}{Style.RESET_ALL} To Login as existing user\n" \
               f"{BOLD}{'--signup':10}{Style.RESET_ALL} To Signup as a new user\n"
     if login:
@@ -29,16 +29,8 @@ def cli(login, add, view, viewall, delete, signup):
     if signup:
         data = user.UserSignUp.signup_information()
         user.UserSignUp.save_to_db(data)
-    elif add:
-        print(message)
-    elif view:
-        print(message)
-    elif viewall:
-        print(message)
-    elif delete:
-        print(message)
     else:
-        print("To use the app, add the --login or --signup at the end of app.py name")
+        print(message)
 
 if __name__ == '__main__':
     cli()
