@@ -1,19 +1,19 @@
 import user, click, os
 from database import Database
 from colorama import Fore, Style
-from LOGO import x, github
+# from LOGO import x, github
 BOLD = '\033[1m'
 
 os.system('cls' if os.name == 'nt' else 'clear')
 @click.command()
 @click.option('--signup', is_flag=True, help='to sign up as a user ')
 @click.option('--login', is_flag=True, help='to login the account')
-@click.option('--add', is_flag=True, help="to add a new contact")
-@click.option('--view', is_flag=True, help='to view specific contact ')
-@click.option('--viewall', is_flag=True, help='to view all contacts')
-@click.option('--delete', is_flag=True, help='to delete a contact')
+# @click.option('--add', is_flag=True, help="to add a new contact")
+# @click.option('--view', is_flag=True, help='to view specific contact ')
+# @click.option('--viewall', is_flag=True, help='to view all contacts')
+# @click.option('--delete', is_flag=True, help='to delete a contact')
 # @click.password_option()
-def cli(login, add, view, viewall, delete, signup):
+def cli(login, signup):
     Database.initialise(database="cotactbook",
                         user="postgres",
                         password="147r258r",

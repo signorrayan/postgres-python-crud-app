@@ -2,7 +2,7 @@ from database import CurserFromConnectionFromPool
 from colorama import Fore, Style
 from datetime import datetime
 from getpass import getpass
-from LOGO import x
+# from LOGO import x
 import os
 BOLD = '\033[1m'
 
