@@ -57,12 +57,12 @@ pip3 install -r requirement.txt
 
 #### Sign-up as a new user:
 ```bash
-python app.py --signup
+python bin/app.py --signup
 ```
 
 #### login as a user:
 ```bash
-python app.py --login
+python bin/app.py --login
 ```
 
 ```bash
