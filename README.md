@@ -1,17 +1,17 @@
 # Advanced-CRUD-App-using-python-and-postgreSQL
 
-#### an CLI program to manage people informations using python and postgreSQL.
+a CLI script to manage contact information using python and PostgreSQL.\
 (Including Firstname, Lastname, Email, Phonenumber)\
-The App based on user authentication, using python and Postgresql
+The script is based on user authentication.
 
-#### Clone and change directory:
+#### Install requirements and clone repository and change directory:
 ```bash
 $ git clone https://github.com/signorrayan/Advanced-CRUD-app-using-python-and-postgresql.git
 $ sudo apt update && sudo apt install python3-pip python3-venv
 $ cd Advanced-CRUD-app-using-python-and-postgresql/
 ```
 
-#### To configure PostgreSQL, Enter your databae indformation inside app.py:
+#### To configure PostgreSQL, Enter your database indformation inside app.py:
 ```bash
 Database.initialise(database="contactbook",
                         user=" ",
@@ -50,12 +50,12 @@ source venv/bin/activate
 pip3 install -r requirement.txt
 ```
 
-#### Sign-up as a new User:
+#### Sign-up as a new user:
 ```bash
 python app.py --signup
 ```
 
-#### login as a User:
+#### login as a user:
 ```bash
 python app.py --login
 ```
