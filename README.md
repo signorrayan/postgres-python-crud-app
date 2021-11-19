@@ -9,14 +9,14 @@ The script is based on user authentication.
 
 
 
-#### Install requirements and clone repository and change directory:
+- #### Install requirements and clone repository and change directory:
 ```bash
 $ git clone https://github.com/signorrayan/Advanced-CRUD-app-using-python-and-postgresql.git
 $ sudo apt update && sudo apt install python3-pip python3-venv
 $ cd Advanced-CRUD-app-using-python-and-postgresql/
 ```
 
-#### To configure PostgreSQL, Enter your database indformation inside app.py:
+- #### To configure PostgreSQL, Enter your database indformation inside app.py:
 ```bash
 Database.initialise(database="contactbook",
                         user=" ",
@@ -28,7 +28,7 @@ Database.initialise(database="contactbook",
 
 
 
-#### create tables in `contactbook` DB and extension(to encrypt password) in DB:
+- #### create tables in `contactbook` DB and extension(to encrypt password) in DB:
 ```bash
 CREATE TABLE users(
   u_id SERIAL PRIMARY KEY,
@@ -48,19 +48,19 @@ CREATE TABLE contact(
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 ```
 
-#### Create Virtual Environment:
+- #### Create Virtual Environment:
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 pip3 install -r requirement.txt
 ```
 
-#### Sign-up as a new user:
+- #### Sign-up as a new user:
 ```bash
 python bin/app.py --signup
 ```
 
-#### login as a user:
+- #### login as a user:
 ```bash
 python bin/app.py --login
 ```
