@@ -47,7 +47,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 ```bash
 python3 -m venv venv
 source venv/bin/activate
-pip3 install requirement.txt
+pip3 install -r requirement.txt
 ```
 
 #### Sign-up as a new User:

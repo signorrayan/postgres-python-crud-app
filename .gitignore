@@ -6,3 +6,5 @@ LOGO.py
 .vscode
 ContactBookDB.session.sql
 /venv
+.git
+/venv/*
