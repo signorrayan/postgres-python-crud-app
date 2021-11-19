@@ -4,6 +4,11 @@ a CLI script to manage contact information using python and PostgreSQL.\
 (Including Firstname, Lastname, Email, Phonenumber)\
 The script is based on user authentication.
 
+
+![demo](https://github.com/signorrayan/Advanced-CRUD-app-using-python-and-postgresql/blob/master/Demo/pic.png)
+
+
+
 #### Install requirements and clone repository and change directory:
 ```bash
 $ git clone https://github.com/signorrayan/Advanced-CRUD-app-using-python-and-postgresql.git
