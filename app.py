@@ -14,7 +14,7 @@ os.system('cls' if os.name == 'nt' else 'clear')
 # @click.option('--delete', is_flag=True, help='to delete a contact')
 # @click.password_option()
 def cli(login, signup):
-    Database.initialise(database="cotactbook",
+    Database.initialise(database="contactbook",
                         user="postgres",
                         password="147r258r",
                         host="localhost",
