@@ -5,3 +5,4 @@ LOGO.py
 .idea
 .vscode
 ContactBookDB.session.sql
+/venv
