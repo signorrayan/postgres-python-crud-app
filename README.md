@@ -1,7 +1,7 @@
 # Advanced-CRUD-App-using-python-and-postgreSQL
 
-a CLI script to manage contact information using python and PostgreSQL.\
-(Including Firstname, Lastname, Email, Phonenumber)\
+A cli script to manage contact information using python and PostgreSQL.\
+(including Firstname, Lastname, Email, Phonenumber)\
 The script is based on user authentication.
 
 
@@ -11,12 +11,43 @@ The script is based on user authentication.
 
 - #### Install requirements and clone repository and change directory:
 ```bash
-$ git clone https://github.com/signorrayan/Advanced-CRUD-app-using-python-and-postgresql.git
 $ sudo apt update && sudo apt install python3-pip python3-venv
+$ git clone https://github.com/signorrayan/Advanced-CRUD-app-using-python-and-postgresql.git
 $ cd Advanced-CRUD-app-using-python-and-postgresql/
 ```
 
-- #### To configure PostgreSQL, Enter your database indformation inside app.py:
+- #### create DB, tables in `contactbook` DB and extension(to encrypt password) in DB:
+
+```bash
+$ su - postgres
+$ psql
+
+postgres=$ CREATE DATABASE contactbook;
+
+postgres=$ \c contactbook
+
+contactbook=$ CREATE TABLE users(
+  u_id SERIAL PRIMARY KEY,
+  user_name VARCHAR(50) UNIQUE NOT NULL,
+  password TEXT NOT NULL
+  );
+
+contactbook=$ CREATE TABLE contact(
+  c_id SERIAL PRIMARY KEY,
+  first_name VARCHAR(100) not null,
+  last_name VARCHAR(100) not null,
+  email VARCHAR(200),
+  phone_number VARCHAR(11),
+  u_id int references users(u_id) not null
+  );
+
+contactbook=$ CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+contactbook=$ \q
+
+```
+
+- #### to configure PostgreSQL, enter your database indformation inside app.py:
 ```bash
 Database.initialise(database="contactbook",
                         user=" ",
@@ -26,27 +57,6 @@ Database.initialise(database="contactbook",
                         ) #create a database connection
 ```
 
-
-
-- #### create tables in `contactbook` DB and extension(to encrypt password) in DB:
-```bash
-CREATE TABLE users(
-  u_id SERIAL PRIMARY KEY,
-  user_name VARCHAR(50) UNIQUE NOT NULL,
-  password TEXT NOT NULL
-  );
-
-CREATE TABLE contact(
-  c_id SERIAL PRIMARY KEY,
-  first_name VARCHAR(100) not null,
-  last_name VARCHAR(100) not null,
-  email VARCHAR(200),
-  phone_number VARCHAR(11),
-  u_id int references users(u_id) not null
-  );
-
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
-```
 
 - #### Create Virtual Environment:
 ```bash
